@@ -3,12 +3,18 @@ package com.aarshinkov.api.hotelly.controllers;
 import com.aarshinkov.api.hotelly.entities.UserEntity;
 import com.aarshinkov.api.hotelly.repositories.UsersRepository;
 import com.aarshinkov.api.hotelly.requests.users.UserCreateRequest;
+import com.aarshinkov.api.hotelly.responses.users.UserCreatedResponse;
+import com.aarshinkov.api.hotelly.responses.users.UserGetResponse;
+import com.aarshinkov.api.hotelly.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,52 +26,64 @@ import java.util.List;
 public class UsersController {
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserService userService;
 
     @ApiOperation(value = "Get users")
     @GetMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserEntity> getUsers() {
+    public ResponseEntity<List<UserGetResponse>> getUsers() {
 
-        return usersRepository.findAll();
+        List<UserEntity> users = userService.getUsers();
+
+        List<UserGetResponse> response = new ArrayList<>();
+
+        for (UserEntity user : users) {
+            response.add(getUserResponseFromEntity(user));
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get particular user")
     @GetMapping(value = "/api/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserEntity getUser(@PathVariable("userId") String userId) {
+    public ResponseEntity<UserGetResponse> getUser(@PathVariable("userId") String userId) {
 
-        return usersRepository.findByUserId(userId);
+        UserEntity user = userService.getUserByUserId(userId);
+
+        return new ResponseEntity<>(getUserResponseFromEntity(user), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Create user")
     @PostMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserEntity createUser(@RequestBody UserCreateRequest ucr) {
+    public ResponseEntity<UserCreatedResponse> createUser(@RequestBody UserCreateRequest ucr) {
 
-        UserEntity user = new UserEntity();
-        user.setEmail(ucr.getEmail());
-        user.setPassword(ucr.getPassword());
-        user.setFirstName(ucr.getFirstName());
-        user.setLastName(ucr.getLastName());
+        UserEntity createdUser = userService.createUser(ucr);
 
-        UserEntity createdUser = usersRepository.save(user);
+        UserCreatedResponse response = new UserCreatedResponse();
+        response.setUserId(createdUser.getUserId());
+        response.setEmail(createdUser.getEmail());
+        response.setFirstName(createdUser.getFirstName());
+        response.setLastName(createdUser.getLastName());
+        response.setCreatedOn(createdUser.getCreatedOn());
 
-        return createdUser;
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Delete user")
     @DeleteMapping(value = "/api/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Boolean deleteUser(@PathVariable("userId") String userId) {
-        UserEntity user = usersRepository.findByUserId(userId);
+    public ResponseEntity<Boolean> deleteUser(@PathVariable("userId") String userId) {
 
-        if (user == null) {
-            return false;
-        }
+        return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.OK);
+    }
 
-        try {
-            usersRepository.delete(user);
-        } catch (Exception e) {
-            return false;
-        }
+    private UserGetResponse getUserResponseFromEntity(UserEntity user) {
 
-        return true;
+        UserGetResponse ugr = new UserGetResponse();
+        ugr.setUserId(user.getUserId());
+        ugr.setEmail(user.getEmail());
+        ugr.setFirstName(user.getFirstName());
+        ugr.setLastName(user.getLastName());
+        ugr.setCreatedOn(user.getCreatedOn());
+        ugr.setEditedOn(user.getEditedOn());
+        return ugr;
     }
 }
