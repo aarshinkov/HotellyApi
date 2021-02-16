@@ -1,7 +1,6 @@
 package com.aarshinkov.api.hotelly.controllers;
 
 import com.aarshinkov.api.hotelly.entities.UserEntity;
-import com.aarshinkov.api.hotelly.repositories.UsersRepository;
 import com.aarshinkov.api.hotelly.requests.users.UserCreateRequest;
 import com.aarshinkov.api.hotelly.responses.users.UserCreatedResponse;
 import com.aarshinkov.api.hotelly.responses.users.UserGetResponse;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Atanas Yordanov Arshinkov
@@ -24,6 +25,8 @@ import java.util.List;
 @RestController
 @Api(value = "Users", tags = "Users")
 public class UsersController {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private UserService userService;
@@ -37,7 +40,7 @@ public class UsersController {
         List<UserGetResponse> response = new ArrayList<>();
 
         for (UserEntity user : users) {
-            response.add(getUserResponseFromEntity(user));
+            response.add(getUserGetResponseFromEntity(user));
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -49,7 +52,7 @@ public class UsersController {
 
         UserEntity user = userService.getUserByUserId(userId);
 
-        return new ResponseEntity<>(getUserResponseFromEntity(user), HttpStatus.OK);
+        return new ResponseEntity<>(getUserGetResponseFromEntity(user), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Create user")
@@ -75,7 +78,7 @@ public class UsersController {
         return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.OK);
     }
 
-    private UserGetResponse getUserResponseFromEntity(UserEntity user) {
+    private UserGetResponse getUserGetResponseFromEntity(UserEntity user) {
 
         UserGetResponse ugr = new UserGetResponse();
         ugr.setUserId(user.getUserId());
