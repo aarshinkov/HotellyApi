@@ -7,6 +7,7 @@ import com.aarshinkov.api.hotelly.responses.hotels.AddressGetResponse;
 import com.aarshinkov.api.hotelly.responses.hotels.HotelGetResponse;
 import com.aarshinkov.api.hotelly.responses.users.UserGetResponse;
 import com.aarshinkov.api.hotelly.services.HotelService;
+import com.aarshinkov.api.hotelly.utils.ResponseCodes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -56,7 +57,7 @@ public class HotelsController {
         HotelEntity storedHotel = hotelService.getHotelByHotelId(hotelId);
 
         if (storedHotel == null) {
-            throw new HollException(2001, "Hotel not found", "The hotel does not exist", HttpStatus.BAD_REQUEST);
+            throw new HollException(ResponseCodes.HOTEL_NOT_FOUND, "Hotel not found", "The hotel does not exist", HttpStatus.NOT_FOUND);
         }
 
         HotelGetResponse hotel = getHotelGetResponseFromEntity(storedHotel);
@@ -73,10 +74,30 @@ public class HotelsController {
         return new ResponseEntity<>(createdHotel, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Delete hotel")
+    @DeleteMapping(value = "/api/hotels/{hotelId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> deleteHotel(@PathVariable("hotelId") String hotelId) {
+
+        HotelEntity hotel = hotelService.getHotelByHotelId(hotelId);
+
+        if (hotel == null) {
+            throw new HollException(ResponseCodes.HOTEL_NOT_FOUND, "Hotel not found", "The hotel does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            hotelService.deleteHotel(hotel);
+            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.OK);
+        }
+    }
+
     private HotelGetResponse getHotelGetResponseFromEntity(HotelEntity entity) {
+
         HotelGetResponse hotel = new HotelGetResponse();
         hotel.setHotelId(entity.getHotelId());
         hotel.setName(entity.getName());
+        hotel.setDescription(entity.getDescription());
 
         AddressGetResponse address = new AddressGetResponse();
         address.setAddressId(entity.getAddress().getAddressId());

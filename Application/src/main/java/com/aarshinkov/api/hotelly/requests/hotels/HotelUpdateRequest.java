@@ -1,10 +1,10 @@
 package com.aarshinkov.api.hotelly.requests.hotels;
 
+import java.io.Serializable;
 import lombok.*;
 
-import java.io.Serializable;
-
 /**
+ *
  * @author Atanas Yordanov Arshinkov
  * @since 1.0.0
  */
@@ -13,8 +13,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class HotelCreateRequest implements Serializable {
+public class HotelUpdateRequest implements Serializable {
 
+    private String hotelId;
     private String name;
     private String description;
     private String countryCode;
@@ -22,6 +23,5 @@ public class HotelCreateRequest implements Serializable {
     private String street;
     private Integer number;
     private Integer stars;
-    private byte[] mainImage;
-    private String userId;
+    private String mainImage;
 }

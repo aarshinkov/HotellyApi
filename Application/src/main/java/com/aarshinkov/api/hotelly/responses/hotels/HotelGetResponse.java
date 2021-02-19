@@ -19,6 +19,7 @@ public class HotelGetResponse implements Serializable {
 
     private String hotelId;
     private String name;
+    private String description;
     private AddressGetResponse address;
     private Integer stars;
     private String mainImage;

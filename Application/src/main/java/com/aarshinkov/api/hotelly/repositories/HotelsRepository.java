@@ -1,6 +1,7 @@
 package com.aarshinkov.api.hotelly.repositories;
 
 import com.aarshinkov.api.hotelly.entities.HotelEntity;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface HotelsRepository extends JpaRepository<HotelEntity, String> {
+
+    List<HotelEntity> findAllByOrderByCreatedOnDesc();
 
     HotelEntity findByHotelId(String hotelId);
 }

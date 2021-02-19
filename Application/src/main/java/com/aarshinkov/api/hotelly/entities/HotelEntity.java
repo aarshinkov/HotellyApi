@@ -30,7 +30,10 @@ public class HotelEntity implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @Column(name = "description")
+    private String description;
+
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "address", referencedColumnName = "address_id")
     private AddressEntity address;
 
@@ -40,7 +43,7 @@ public class HotelEntity implements Serializable {
     @Column(name = "main_image")
     private String mainImage;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "owner", referencedColumnName = "user_id")
     private UserEntity owner;
 

@@ -50,6 +50,7 @@ CREATE TABLE addresses(
 CREATE TABLE hotels(
 	hotel_id varchar(100) not null primary key,
 	name varchar(200) not null,
+	description text not null,
 	address varchar(100) not null references addresses(address_id) on update cascade on delete restrict,
 	stars int not null default 0,
 	main_image text,

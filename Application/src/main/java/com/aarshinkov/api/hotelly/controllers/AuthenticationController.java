@@ -5,6 +5,7 @@ import com.aarshinkov.api.hotelly.exceptions.HollException;
 import com.aarshinkov.api.hotelly.requests.LoginRequest;
 import com.aarshinkov.api.hotelly.responses.LoginResponse;
 import com.aarshinkov.api.hotelly.services.UserService;
+import com.aarshinkov.api.hotelly.utils.ResponseCodes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -37,11 +38,11 @@ public class AuthenticationController {
         LoginResponse response = new LoginResponse();
 
         if (user == null) {
-            throw new HollException(400, "Bad credentials", "Invalid email or password", HttpStatus.BAD_REQUEST);
+            throw new HollException(ResponseCodes.BAD_CREDENTIALS, "Bad credentials", "Invalid email or password", HttpStatus.BAD_REQUEST);
         }
 
         if (!loginRequest.getPassword().equals(user.getPassword())) {
-            throw new HollException(400, "Bad credentials", "Invalid email or password", HttpStatus.BAD_REQUEST);
+            throw new HollException(ResponseCodes.BAD_CREDENTIALS, "Bad credentials", "Invalid email or password", HttpStatus.BAD_REQUEST);
         }
 
         response.setUserId(user.getUserId());
