@@ -33,9 +33,17 @@ public class HotelEntity implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "address", referencedColumnName = "address_id")
-    private AddressEntity address;
+    @Column(name = "country_code")
+    private String countryCode;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "number")
+    private Integer number;
 
     @Column(name = "stars")
     private Integer stars;

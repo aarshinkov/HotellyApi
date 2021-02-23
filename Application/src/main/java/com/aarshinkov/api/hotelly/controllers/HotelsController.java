@@ -3,7 +3,6 @@ package com.aarshinkov.api.hotelly.controllers;
 import com.aarshinkov.api.hotelly.entities.HotelEntity;
 import com.aarshinkov.api.hotelly.exceptions.HollException;
 import com.aarshinkov.api.hotelly.requests.hotels.HotelCreateRequest;
-import com.aarshinkov.api.hotelly.responses.hotels.AddressGetResponse;
 import com.aarshinkov.api.hotelly.responses.hotels.HotelGetResponse;
 import com.aarshinkov.api.hotelly.responses.users.UserGetResponse;
 import com.aarshinkov.api.hotelly.services.HotelService;
@@ -98,16 +97,10 @@ public class HotelsController {
         hotel.setHotelId(entity.getHotelId());
         hotel.setName(entity.getName());
         hotel.setDescription(entity.getDescription());
-
-        AddressGetResponse address = new AddressGetResponse();
-        address.setAddressId(entity.getAddress().getAddressId());
-        address.setCountryCode(entity.getAddress().getCountryCode());
-        address.setCity(entity.getAddress().getCity());
-        address.setStreet(entity.getAddress().getStreet());
-        address.setNumber(entity.getAddress().getNumber());
-        address.setCreatedOn(entity.getAddress().getCreatedOn());
-
-        hotel.setAddress(address);
+        hotel.setCountryCode(entity.getCountryCode());
+        hotel.setCity(entity.getCity());
+        hotel.setStreet(entity.getStreet());
+        hotel.setNumber(entity.getNumber());
         hotel.setStars(entity.getStars());
         hotel.setMainImage(entity.getMainImage());
 

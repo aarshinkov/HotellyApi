@@ -1,6 +1,5 @@
 package com.aarshinkov.api.hotelly.services;
 
-import com.aarshinkov.api.hotelly.entities.AddressEntity;
 import com.aarshinkov.api.hotelly.entities.HotelEntity;
 import com.aarshinkov.api.hotelly.entities.UserEntity;
 import com.aarshinkov.api.hotelly.exceptions.HollException;
@@ -59,16 +58,10 @@ public class HotelServiceImpl implements HotelService {
         hotel.setHotelId(UUID.randomUUID().toString());
         hotel.setName(hcr.getName());
         hotel.setDescription(hcr.getDescription());
-
-        AddressEntity address = new AddressEntity();
-        address.setAddressId(UUID.randomUUID().toString());
-        address.setCountryCode(hcr.getCountryCode());
-        address.setCity(hcr.getCity());
-        address.setStreet(hcr.getStreet());
-        address.setNumber(hcr.getNumber());
-
-        hotel.setAddress(address);
-
+        hotel.setCountryCode(hcr.getCountryCode());
+        hotel.setCity(hcr.getCity());
+        hotel.setStreet(hcr.getStreet());
+        hotel.setNumber(hcr.getNumber());
         hotel.setStars(hcr.getStars());
 
         FileName image = new FileName();
